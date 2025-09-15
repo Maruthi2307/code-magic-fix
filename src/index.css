@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Traffic Simulation Design System */
 
 @layer base {
   :root {
+    /* Traffic Simulation Color Palette */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -38,20 +37,35 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Traffic Simulation Theme Colors */
+    --traffic-primary: 250 58% 71%;
+    --traffic-primary-dark: 258 47% 56%;
+    --traffic-secondary: 293 47% 67%;
+    --traffic-accent: 316 73% 86%;
+    --traffic-success: 142 71% 45%;
+    --traffic-error: 0 84% 60%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--traffic-primary)), hsl(var(--traffic-primary-dark)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--traffic-primary)) 0%, hsl(var(--traffic-primary-dark)) 50%, hsl(var(--traffic-accent)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(248 53% 99%), hsl(0 0% 100%));
+    
+    /* Shadows */
+    --shadow-card: 0 20px 60px hsla(var(--traffic-primary) / 0.15);
+    --shadow-button: 0 10px 30px hsla(var(--traffic-primary) / 0.4);
+    --shadow-input: 0 0 0 4px hsla(var(--traffic-primary) / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -101,5 +115,212 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-secondary);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  /* Traffic Simulation Components */
+  .traffic-app-container {
+    @apply max-w-md mx-auto rounded-3xl overflow-hidden border border-white/20;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .traffic-header {
+    @apply relative overflow-hidden text-white text-center;
+    background: var(--gradient-primary);
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .traffic-header::before {
+    content: '';
+    @apply absolute -top-1/2 -left-1/2 w-[200%] h-[200%];
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.1) 0px,
+      rgba(255,255,255,0.1) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(100px); }
+  }
+
+  .traffic-app-icon {
+    @apply text-6xl mb-2 relative z-10;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+
+  .traffic-input {
+    @apply w-full p-4 border-2 border-gray-200 rounded-xl text-base bg-white;
+    transition: var(--transition-smooth);
+  }
+
+  .traffic-input:focus {
+    @apply outline-none border-[hsl(var(--traffic-primary))];
+    box-shadow: var(--shadow-input);
+    transform: translateY(-1px);
+  }
+
+  .traffic-input:invalid {
+    @apply border-red-500 bg-red-50;
+  }
+
+  .traffic-vehicle-section {
+    @apply border-2 border-gray-200 rounded-2xl p-5 mb-6 bg-white;
+    background: var(--gradient-card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: var(--transition-smooth);
+  }
+
+  .traffic-vehicle-section:hover {
+    @apply border-[hsl(var(--traffic-primary))];
+    box-shadow: 0 6px 20px hsla(var(--traffic-primary) / 0.1);
+    transform: translateY(-2px);
+  }
+
+  .traffic-checkbox {
+    @apply relative;
+  }
+
+  .traffic-checkbox input[type="checkbox"] {
+    @apply opacity-0 absolute;
+  }
+
+  .traffic-checkbox-design {
+    @apply w-6 h-6 border-2 border-gray-300 rounded-lg bg-white flex items-center justify-center cursor-pointer;
+    transition: var(--transition-smooth);
+  }
+
+  .traffic-checkbox input[type="checkbox"]:checked + .traffic-checkbox-design {
+    background: hsl(var(--traffic-primary));
+    border-color: hsl(var(--traffic-primary));
+  }
+
+  .traffic-checkbox input[type="checkbox"]:checked + .traffic-checkbox-design::after {
+    content: '✓';
+    @apply text-white font-bold text-sm;
+  }
+
+  .traffic-gender-item {
+    @apply flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer bg-white relative;
+    transition: var(--transition-bounce);
+  }
+
+  .traffic-gender-item:hover {
+    @apply border-[hsl(var(--traffic-primary))];
+    background: hsl(248 53% 99%);
+    transform: translateY(-2px);
+  }
+
+  .traffic-gender-item input[type="radio"] {
+    @apply absolute opacity-0;
+  }
+
+  .traffic-gender-item.checked {
+    @apply border-[hsl(var(--traffic-primary))];
+    background: hsl(248 53% 99%);
+  }
+
+  .traffic-gender-item.checked .traffic-gender-content {
+    color: hsl(var(--traffic-primary));
+  }
+
+  .traffic-submit-btn {
+    @apply w-full p-4 text-white border-none rounded-xl text-lg font-semibold cursor-pointer relative overflow-hidden;
+    background: var(--gradient-primary);
+    transition: var(--transition-smooth);
+  }
+
+  .traffic-submit-btn::before {
+    content: '';
+    @apply absolute top-0 left-[-100%] w-full h-full;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .traffic-submit-btn:hover::before {
+    left: 100%;
+  }
+
+  .traffic-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-button);
+  }
+
+  .traffic-submit-btn:active {
+    transform: translateY(-1px);
+  }
+
+  .traffic-submit-btn:disabled {
+    @apply opacity-75 cursor-not-allowed;
+    transform: none !important;
+  }
+
+  .traffic-vehicle-number-input {
+    @apply mt-4 opacity-0 max-h-0 overflow-hidden;
+    transition: var(--transition-smooth);
+  }
+
+  .traffic-vehicle-number-input.show {
+    @apply opacity-100 max-h-20;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-10px); }
+    to { transform: translateY(0); }
+  }
+
+  .traffic-loading {
+    @apply inline-block w-5 h-5 border-2 border-white/30 rounded-full;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .traffic-success-icon {
+    @apply text-6xl mb-4;
+    color: hsl(var(--traffic-success));
+    animation: successPulse 1s ease-in-out;
+  }
+
+  @keyframes successPulse {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .traffic-profile-pic-preview {
+    @apply w-32 h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer relative overflow-hidden;
+    background: var(--gradient-card);
+    transition: var(--transition-bounce);
+  }
+
+  .traffic-profile-pic-preview:hover {
+    @apply border-[hsl(var(--traffic-primary))];
+    background: hsl(248 53% 99%);
+    transform: scale(1.05);
+  }
+
+  .traffic-profile-pic-preview img {
+    @apply w-full h-full object-cover rounded-full;
   }
 }

@@ -47,6 +47,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Traffic Simulation Colors
+        traffic: {
+          primary: "hsl(var(--traffic-primary))",
+          "primary-dark": "hsl(var(--traffic-primary-dark))",
+          secondary: "hsl(var(--traffic-secondary))",
+          accent: "hsl(var(--traffic-accent))",
+          success: "hsl(var(--traffic-success))",
+          error: "hsl(var(--traffic-error))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
